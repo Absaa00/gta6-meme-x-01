@@ -1,1 +1,7 @@
-{"competition":"gta6-meme-x-01","expected_account":"@MisbahhuddinMd","image":"meme.png","post_url":null,"status":"PENDING - the X post has not been made yet. The user will post the meme from their public X account; update post_url with the real post URL before submitting."}
+{
+  "competition": "gta6-meme-x-01",
+  "expected_account": "@MisbahhuddinMd",
+  "image": "meme.png",
+  "post_url": "https://x.com/MisbahhuddinMd/status/2123436564411977940",
+  "status": "POSTED - post live at 22:21 WIB 19 Nov 2026, verified read-only (account @MisbahhuddinMd, caption + meme image match)."
+}
