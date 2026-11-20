@@ -471,20 +471,32 @@ function main(): void {
 
   const png = encodePng(W, H, canvas);
   const written: string[] = [];
-  const localOut = path.join(here, "output", "entry.png");
-  fs.mkdirSync(path.dirname(localOut), { recursive: true });
-  fs.writeFileSync(localOut, png);
-  written.push(localOut);
-  const memePath = path.join(here, "meme.png");
-  fs.writeFileSync(memePath, png);
-  written.push(memePath);
+  // Primary deliverable: the grader's writable output dir. The grader mounts
+  // the repository read-only at /bot, so this write must come first and the
+  // local copies below are best-effort only.
+  const outDir = process.env.MAKEFUN_OUTPUT_DIR || "/output";
   try {
-    fs.mkdirSync("/output", { recursive: true });
-    const absOut = "/output/entry.png";
-    fs.writeFileSync(absOut, png);
-    written.push(absOut);
+    fs.mkdirSync(outDir, { recursive: true });
+    const outPath = path.join(outDir, "entry.png");
+    fs.writeFileSync(outPath, png);
+    written.push(outPath);
   } catch {
-    // /output is not writable here; the local copies are the deliverable.
+    // No writable output dir here; the local copies below are best-effort.
+  }
+  try {
+    const localOut = path.join(here, "output", "entry.png");
+    fs.mkdirSync(path.dirname(localOut), { recursive: true });
+    fs.writeFileSync(localOut, png);
+    written.push(localOut);
+  } catch {
+    // Read-only repo in the grader; the output-dir copy above is the deliverable.
+  }
+  try {
+    const memePath = path.join(here, "meme.png");
+    fs.writeFileSync(memePath, png);
+    written.push(memePath);
+  } catch {
+    // Same as above.
   }
   console.log(`meme: ${W}x${H} PNG, ${png.length} bytes`);
   for (const p of written) console.log(`wrote ${p}`);
